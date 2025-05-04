@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin', // added for admin flag
     ];
 
     /**
@@ -41,5 +42,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean', // cast is_admin to boolean
     ];
+
+    public function isAdmin(): bool {
+        // Returns the admin flag (defaults to false if not set)
+        return $this->is_admin ?? false;
+    }
 }
