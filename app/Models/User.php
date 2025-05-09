@@ -18,10 +18,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
-        'is_admin', // added for admin flag
     ];
 
     /**
@@ -40,13 +38,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'is_admin' => 'boolean', // cast is_admin to boolean
     ];
-
-    public function isAdmin(): bool {
-        // Returns the admin flag (defaults to false if not set)
-        return $this->is_admin ?? false;
-    }
 }

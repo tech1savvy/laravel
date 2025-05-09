@@ -19,9 +19,201 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
-    return view('welcome');
+    return 'welcome';
 });
+
+Route::get('/login', function(){
+    return view('login');
+})->name('login');
+
+Route::post('/login', function(Request $request){
+    
+    $data = $request->only('username', 'password');
+
+    if(Auth::attempt($data)){
+        $request->session()->regenerate();
+        return redirect()->route('profile');
+    }
+
+    return redirect()->back()->with('error', 'wrong id or password');
+})->name('login');
+
+Route::get('/profile', function(){
+    return view('profile');
+})->name('profile')->middleware('auth');
+
+Route::post('/logout', function(Request $request){
+
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login');
+})->name('logout');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::get('/blade', function () {
     return view('blade.index');
@@ -108,13 +300,13 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 });
 
-// Authentication
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+// // Authentication
+// Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+// Route::post('login', [AuthController::class, 'login']);
+// Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [AuthController::class, 'register']);
+// Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
+// Route::post('register', [AuthController::class, 'register']);
 
 // Admin Middleware on Route
 Route::get('/admin/dashboard', function(){
@@ -132,7 +324,6 @@ Route::get('/contact', function() {
 Route::post('/contact', [ContactController::class, 'send']);
 
 // Cookies
-use Illuminate\Http\Request;
 
 Route::view('/theme', 'theme')->name('theme');
 
